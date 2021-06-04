@@ -1,6 +1,6 @@
 !------------------------------------------------------------------------------
 ! Contributed by Vincent Magnin
-! Last modifications: vmagnin 2021-06-01
+! Last modifications: vmagnin 2021-06-04
 ! MIT license
 !------------------------------------------------------------------------------
 
@@ -20,7 +20,8 @@ module GUI_module
   & gtk_statusbar_push, gtk_statusbar_get_context_id, &
   & GTK_ORIENTATION_VERTICAL, gtk_grid_set_column_homogeneous, &
   & gtk_grid_set_row_homogeneous, gtk_widget_set_vexpand, &
-  & gtk_grid_set_column_spacing, gtk_grid_set_row_spacing
+  & gtk_grid_set_column_spacing, gtk_grid_set_row_spacing, &
+  & gtk_widget_set_margin_end
 
   use, intrinsic :: iso_c_binding
 
@@ -178,6 +179,9 @@ contains
     ! The third screen quarter will be used for printing text:
     textView = gtk_text_view_new ()
     call gtk_text_view_set_monospace(textView, TRUE)
+    ! A 10 pixels margin at the right of the widget:
+    call gtk_widget_set_margin_end (textView, 10_c_int)
+
     buffer = gtk_text_view_get_buffer (textView)
     call gtk_text_buffer_set_text (buffer, "My scientific app: drawing the Lorenz attractor"//c_new_line// &
         & "You can copy this text and even edit it !"//c_new_line//c_null_char,&

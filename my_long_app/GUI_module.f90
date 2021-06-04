@@ -1,6 +1,6 @@
 !------------------------------------------------------------------------------
 ! Contributed by Vincent Magnin
-! Last modifications: vmagnin 2021-06-01
+! Last modifications: vmagnin 2021-06-04
 ! MIT license
 !------------------------------------------------------------------------------
 
@@ -21,7 +21,8 @@ module GUI_module
   & GTK_ORIENTATION_VERTICAL, gtk_grid_set_column_homogeneous, &
   & gtk_grid_set_row_homogeneous, gtk_widget_set_vexpand, &
   & gtk_grid_set_column_spacing, gtk_grid_set_row_spacing, &
-  & gtk_widget_set_halign, GTK_ALIGN_CENTER
+  & gtk_widget_set_halign, GTK_ALIGN_CENTER, &
+  & gtk_widget_set_margin_start, gtk_widget_set_margin_end
 
   use g, only: g_main_loop_new, g_main_loop_run, g_main_loop_quit
   use, intrinsic :: iso_c_binding
@@ -145,6 +146,10 @@ contains
     ! The lower part of the window will be used for printing text:
     textView = gtk_text_view_new ()
     call gtk_text_view_set_monospace(textView, TRUE)
+    ! A 10 pixels margin at the left and right of the widget:
+    call gtk_widget_set_margin_start(textView, 10_c_int)
+    call gtk_widget_set_margin_end  (textView, 10_c_int)
+
     buffer = gtk_text_view_get_buffer (textView)
     call gtk_text_buffer_set_text (buffer, "The Buddhabrot"//c_new_line// &
         & "Be patient a few minutes and the ghost will slowly appear..."//c_new_line// &
