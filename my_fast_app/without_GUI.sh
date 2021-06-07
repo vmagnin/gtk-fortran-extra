@@ -1,6 +1,6 @@
 #! /bin/bash
 # Vincent Magnin, 2021-05-21
-# Last modification: 2021-06-02
+# Last modification: 2021-06-07
 # MIT license
 # Verified with shellcheck
 
@@ -15,7 +15,7 @@ rm -f ./*.mod
 : ${FC="gfortran"}
 
 if [ "${FC}" = "ifort" ]; then
-  FLAGS=""
+  FLAGS="-warn all"
 else
   FLAGS="-Wall -Wextra -Wno-unused-dummy-argument -fcheck=all -std=f2008 -pedantic"
 fi
