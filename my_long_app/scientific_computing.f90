@@ -74,9 +74,11 @@ contains
             end do
           end do
           call hook_gtk_widget_queue_draw()
-          
-          ! You also need to manage the GTK events during computation if you
-          ! want the GUI to be reactive:        
+        end if
+
+        ! You also need, more often, to manage the GTK events during computation if you
+        ! want the GUI to be reactive:        
+        if (mod(i, int(pixwidth*pixheight, kind=int64)) == 0) then
           call hook_pending_events()
           if (run_status == FALSE) return ! Exit if we had a destroy signal.
         end if
