@@ -1,6 +1,6 @@
 !------------------------------------------------------------------------------
 ! Contributed by Vincent Magnin
-! Last modifications: vmagnin 2021-06-04
+! Last modifications: vmagnin 2021-06-08
 ! MIT license
 !------------------------------------------------------------------------------
 
@@ -22,19 +22,20 @@ module GUI_module
   & gtk_grid_set_row_homogeneous, gtk_widget_set_vexpand, &
   & gtk_grid_set_column_spacing, gtk_grid_set_row_spacing, &
   & gtk_widget_set_halign, GTK_ALIGN_CENTER, &
-  & gtk_widget_set_margin_start, gtk_widget_set_margin_end
+  & gtk_widget_set_margin_start, gtk_widget_set_margin_end, &
+  & gtk_text_buffer_get_end_iter, gtk_text_buffer_create_mark
 
   use g, only: g_main_loop_new, g_main_loop_run, g_main_loop_quit
   use, intrinsic :: iso_c_binding
   use with_or_without_GUI, only: FALSE, TRUE, run_status, computing
-  ! The my_drawing_area1 c_ptr was defined in the module hooks_GTK:
-  use hooks_GTK, only: my_drawing_area1
+  ! Defined in the module hooks_GTK:
+  use hooks_GTK, only: my_drawing_area1, textView, text_iter, text_mark
 
   implicit none
   type(c_ptr)    :: my_gmainloop
   type(c_ptr)    :: my_window
   type(c_ptr)    :: my_pixbuf1
-  type(c_ptr)    :: textView, scrolled_window, statusBar
+  type(c_ptr)    :: scrolled_window, statusBar
   integer(c_int) :: width, height
 
 contains
@@ -155,6 +156,10 @@ contains
         & "Be patient a few minutes and the ghost will slowly appear..."//c_new_line// &
         & "https://en.wikipedia.org/wiki/Buddhabrot"//c_new_line//c_null_char,&
         & -1_c_int)
+    ! We need a GtkTextIter iterator and a GtkTextMark to manage scrolling:
+    call gtk_text_buffer_get_end_iter (buffer, c_loc(text_iter))
+    ! TRUE is for left gravity:
+    text_mark = gtk_text_buffer_create_mark (buffer, "scroll", c_loc(text_iter), TRUE)
     scrolled_window = gtk_scrolled_window_new()
     call gtk_scrolled_window_set_child(scrolled_window, textView)
     call gtk_grid_attach(table, scrolled_window, 0_c_int, 2_c_int, 1_c_int, 1_c_int)

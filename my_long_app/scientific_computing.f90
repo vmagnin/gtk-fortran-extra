@@ -1,6 +1,6 @@
 !------------------------------------------------------------------------------
 ! Contributed by Vincent Magnin
-! Last modifications: vmagnin 2021-05-28
+! Last modifications: vmagnin 2021-06-08
 ! MIT license
 ! https://en.wikipedia.org/wiki/Buddhabrot
 !------------------------------------------------------------------------------
@@ -82,8 +82,8 @@ contains
         end if
       end if
 
-      if (mod(i, max_iter/5) == 0) then
-        write(s, '(i3, "%")') 20 * i / (max_iter/5)
+      if (mod(i, max_iter/100) == 0) then
+        write(s, '(i3, "%")') i / (max_iter/100)
         call hook_print_string(s)
       end if
     end do

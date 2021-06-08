@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Margins at left and/or right of the TextView widgets, in order they do not touch the window's borders.
+- `my_long_app/`: the TextView is now automatically scrolling.
 
 ## [gtk-fortran-extra 1.0.0] 2021-06-03
 
