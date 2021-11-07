@@ -31,3 +31,7 @@ There are three kinds of Fortran instructions in those apps:
 * Instructions blocks calling gtk-fortran functions, to define the GUI or draw on screen. You must isolate them in one or several files (modules) that will be compiled only by the `with_GUI.sh` script: `GUI_module.f90` and `hooks_GTK_with_GUI.f90`. In your scientific computation, instead of calling directly gtk-fortran functions you will call *hook functions*, which will either call the gtk-fortran functions in the GUI version or do nothing in the command line version.
 
 Following those principles, it should always be possible to obtain an application that can be compiled with or without its GUI. The main practical difficulty is to avoid modules circular dependencies.
+
+## References
+
+* Ondrej CERTIK's code (MIT license) for PPM format: https://github.com/certik/fortran-utils/blob/master/src/ppm.f90
