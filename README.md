@@ -8,6 +8,7 @@ Each application is in a directory:
 
 * `my_fast_app`: a gtk-fortran application for fast computations (ideally < 1 second). In that case, you can use the [GtkApplication API](https://docs.gtk.org/gtk4/class.Application.html). The `activate()` GUI callback function will call the scientific computing subroutine and draw the GUI and the graphical result. In the present case, it draws a [Lorenz attractor](https://en.wikipedia.org/wiki/Lorenz_system), with three planar views and a text view. The command line version will simply print the x, y, z position of the final point.
 * `my_long_app`: a gtk-fortran application for long computations, with a picture that is updated regularly. In that case you can not declare a GtkApplication: you must manage the events of the GLib main loop to keep the GUI reactive during the computation. The application is drawing a [Buddhabrot](https://en.wikipedia.org/wiki/Buddhabrot). The command line version will finally save a picture in [portable pixmap format (PPM)](https://en.wikipedia.org/wiki/Netpbm#File_formats).
+* `unknown_pleasures/`: a Fortran generator of figures similar to the iconic Joy Division's *Unknown Pleasures* cover.
 
 You can see the windows of those apps in the `screenshots/` directory.
 
