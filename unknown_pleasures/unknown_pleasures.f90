@@ -159,7 +159,7 @@ end module handlers
 
 
 ! We create a GtkApplication:
-program cairo_basics
+program unknown_pleasures
   use, intrinsic :: iso_c_binding
   use handlers, only: activate
   use gtk, only: gtk_application_new, g_signal_connect, G_APPLICATION_FLAGS_NONE
@@ -175,4 +175,4 @@ program cairo_basics
                       & c_null_ptr)
   exit_status = g_application_run(app, 0_c_int, c_null_ptr)
   call g_object_unref(app)
-end program cairo_basics
+end program
