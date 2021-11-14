@@ -58,7 +58,7 @@ contains
     width  = nint(625*factor)
     height = nint(593*factor)
     call gtk_window_set_default_size(window, width, height)
-    call gtk_window_set_title(window, "Unknown Pleasures (GTK & Cairo)"//c_null_char)
+    call gtk_window_set_title(window, "Fortran Unknown Pleasures (GTK & Cairo)"//c_null_char)
 
     ! https://docs.gtk.org/gtk4/class.DrawingArea.html
     my_drawing_area = gtk_drawing_area_new()
