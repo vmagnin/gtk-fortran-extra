@@ -118,7 +118,7 @@ contains
       ! Generate random parameters for the line's normal distribution
       nModes = randInt(1, nModesMax)
       do j = 0, nModes-1
-        mus(j) = rand(mx - 50, mx + 50)
+        mus(j) = rand(mx - 50*factor, mx + 50*factor)
         sigmas(j) = randNormal(24.0_dp, 30.0_dp)*factor
       end do
 
