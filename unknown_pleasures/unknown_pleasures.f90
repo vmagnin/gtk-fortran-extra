@@ -151,6 +151,7 @@ contains
     end do
 
     ! Save the image as a PNG:
+    print '("Saving the PNG file: ", I0, " x ", I0, " pixels")', width, height
     cstatus = cairo_surface_write_to_png(cairo_get_target(cr), &
                     & "Fortran_unknown_pleasures.png"//c_null_char)
 
