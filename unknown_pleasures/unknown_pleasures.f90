@@ -22,7 +22,7 @@
 ! SOFTWARE.
 !-------------------------------------------------------------------------------
 ! Fortran version contributed by Vincent Magnin: 2021-11-02
-! Last modification: vmagnin 2021-11-13
+! Last modification: vmagnin 2022-05-03
 !-------------------------------------------------------------------------------
 
 module handlers
@@ -33,18 +33,22 @@ module handlers
   & gtk_drawing_area_set_content_width, gtk_drawing_area_set_content_height, &
   & gtk_drawing_area_set_draw_func, gtk_window_set_child, gtk_widget_show, &
   & gtk_window_set_default_size, gtk_window_set_title, &
-  & FALSE, CAIRO_ANTIALIAS_BEST
+  & FALSE, CAIRO_ANTIALIAS_BEST, &
+  & CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL
 
   use cairo, only: cairo_get_target, cairo_line_to, cairo_move_to, &
   & cairo_set_line_width, cairo_set_source_rgb, cairo_stroke, &
   & cairo_surface_write_to_png, cairo_rectangle, cairo_fill, &
-  & cairo_set_antialias, cairo_fill_preserve
+  & cairo_set_antialias, cairo_fill_preserve, &
+  & cairo_select_font_face, cairo_set_font_size, cairo_show_text
 
   use random
 
   implicit none
   ! Scale factor:
   real(dp), parameter :: factor = 1.7_dp
+  ! With or without text?
+  logical, parameter  :: with_text = .true.
 
 contains
 
@@ -58,7 +62,7 @@ contains
     width  = nint(625*factor)
     height = nint(593*factor)
     call gtk_window_set_default_size(window, width, height)
-    call gtk_window_set_title(window, "Fortran Unknown Pleasures (GTK & Cairo)"//c_null_char)
+    call gtk_window_set_title(window, "Fortran Unknown Pleasures (gtk-fortran)"//c_null_char)
 
     ! https://docs.gtk.org/gtk4/class.DrawingArea.html
     my_drawing_area = gtk_drawing_area_new()
@@ -78,7 +82,7 @@ contains
     type(c_ptr), value, intent(in)    :: widget, cr, gdata
     integer(c_int), value, intent(in) :: width, height
     integer                           :: cstatus
-    integer :: xMin, xMax, yMin, yMax
+    integer :: xMin, xMax, yMin, yMax, yShift
     integer :: nLines, nPoints, nModes
     integer, parameter :: nModesMax = 5
     real(dp), dimension(0:nModesMax-1) :: mus, sigmas
@@ -96,11 +100,18 @@ contains
     call cairo_set_line_width(cr, 1.5_dp)
     call cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST)
 
+    ! If the text is printed, the whole figure is shifted downward:
+    if (with_text) then
+      yShift = 40
+    else
+      yShift = 0
+    end if
+
     ! Determine x and y range
     xMin = nint(140*factor)
     xMax = width - xMin
-    yMin = nint(100*factor)
-    yMax = height - yMin
+    yMin = nint(100*factor) + yShift
+    yMax = height - yMin + 2*yShift
 
     ! Determine the number of lines and the number of points per line
     nLines = 80
@@ -149,6 +160,21 @@ contains
       ! Go to the next line:
       y = y + dy
     end do
+
+    if (with_text) then
+      ! Text in white:
+      call cairo_set_source_rgb(cr, 1.0_dp, 1.0_dp, 1.0_dp)
+      call cairo_select_font_face(cr, "DejaVu Sans Light"//c_null_char, &
+                              & CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL)
+
+      call cairo_set_font_size(cr, 100.0_dp)
+      call cairo_move_to(cr, width/2.0_dp - 7*26.5_dp, (100 + yShift)*1.0_dp)
+      call cairo_show_text(cr, "Fortran"//c_null_char)
+
+      call cairo_set_font_size (cr, 52.0_dp)
+      call cairo_move_to(cr, width/2.0_dp - 17*17.6_dp, (height - 110 + yShift)*1.0_dp)
+      call cairo_show_text(cr, "UNKNOWN PLEASURES"//c_null_char)
+    end if
 
     ! Save the image as a PNG:
     print '("Saving the PNG file: ", I0, " x ", I0, " pixels")', width, height

@@ -4,7 +4,7 @@ The origin of this work is the [Javascript version](https://github.com/MaxHalfor
 
 Bernard Sumner, the guitarist and keyboarder of Joy Division and future singer of New Order, found that figure in the *Cambridge Encyclopaedia of Astronomy* (1977) and ask the young [Peter Saville](https://en.wikipedia.org/wiki/Peter_Saville_(graphic_designer)) to  use it for the cover of their first album [_Unknown Pleasures_](https://en.wikipedia.org/wiki/Unknown_Pleasures) (1979).
 
-![Fortran generated Unknown Pleasures](Fortran_unknown_pleasures_medium.png)
+![Fortran generated Unknown Pleasures](Fortran_unknown_pleasures_text_medium.png)
 	
 In Memoriam Ian Curtis (1956-1980).
 
@@ -14,9 +14,13 @@ Our Fortran version uses [gtk-fortran](https://github.com/vmagnin/gtk-fortran/wi
 
 ### With GFortran
 
+On a UNIX-like system, you can use the build script:
+
 ```bash
 $ ./build.sh && ./a.out
 ```
+
+or you can compile directly:
 
 ```bash
 $ gfortran random.f90 unknown_pleasures.f90 $(pkg-config --cflags --libs gtk-4-fortran)
@@ -36,8 +40,8 @@ but in that case **gtk-fortran must be compiled with the same compiler.**
 
 ## Perspectives
 
-* An animated version could be interesting. It could use a FIFO stack to store each ligne of the signal. Or maybe we could get and put the pseudorandom seed using `call random_seed()` in order to shift lines in the next frame.
-* An SVG output.
+* An animated version could be interesting. It could use a FIFO stack to store each lige of the signal. Or maybe we could get and put the pseudo-random seed using `call random_seed()` in order to shift lines in the next frame.
+* A SVG output.
 
 ## Contributing
 
