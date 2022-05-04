@@ -12,7 +12,21 @@ In Memoriam Ian Curtis (1956-1980).
 
 Our Fortran version uses [gtk-fortran](https://github.com/vmagnin/gtk-fortran/wiki) (GTK 4), and especially its [Cairo graphics library](https://www.cairographics.org/).
 
-### With GFortran
+### With fpm
+
+If you have installed the Fortran Package Manager [fpm](https://fpm.fortran-lang.org/), you have just to type from the `unknown_pleasures/` directory:
+
+```bash
+$ fpm run
+```
+
+fpm will automatically clone the gtk-fortran repository and build everything.
+
+### With the build.sh script
+
+gtk-fortran is supposed to be installed in your system.
+
+#### With GFortran
 
 On a UNIX-like system, you can use the build script:
 
@@ -20,14 +34,7 @@ On a UNIX-like system, you can use the build script:
 $ ./build.sh && ./a.out
 ```
 
-or you can compile directly:
-
-```bash
-$ gfortran random.f90 unknown_pleasures.f90 $(pkg-config --cflags --libs gtk-4-fortran)
-$ ./a.out
-```
-
-### With another compiler
+#### With another compiler
 
 You can use another compiler, for example ifort:
 
@@ -37,10 +44,20 @@ $ ./a.out
 ```
 but in that case **gtk-fortran must be compiled with the same compiler.**
 
+### Directly with your compiler
+
+gtk-fortran is supposed to be installed in your system. You can compile directly:
+
+```bash
+$ gfortran random.f90 unknown_pleasures.f90 $(pkg-config --cflags --libs gtk-4-fortran)
+$ ./a.out
+```
+
+**gtk-fortran must be compiled with the same compiler.**
 
 ## Perspectives
 
-* An animated version could be interesting. It could use a FIFO stack to store each lige of the signal. Or maybe we could get and put the pseudo-random seed using `call random_seed()` in order to shift lines in the next frame.
+* An animated version could be interesting. It could use a FIFO stack to store each line of the signal. Or maybe we could get and put the pseudo-random seed using `call random_seed()` in order to shift lines in the next frame.
 * A SVG output.
 
 ## Contributing

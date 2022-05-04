@@ -1,6 +1,6 @@
 #! /bin/bash
 # Vincent Magnin, 2021-05-21
-# Last modification: 2021-11-04
+# Last modification: 2022-05-04
 # Verified with shellcheck
 
 # Strict mode:
@@ -19,4 +19,7 @@ else
   FLAGS="-Wall -Wextra -Wno-unused-dummy-argument -fcheck=all -std=f2008 -pedantic"
 fi
 
-"${FC}" ${FLAGS} random.f90 unknown_pleasures.f90 $(pkg-config --cflags --libs gtk-4-fortran)
+"${FC}" ${FLAGS} src/random.f90 app/unknown_pleasures.f90 $(pkg-config --cflags --libs gtk-4-fortran)
+
+# Shows the executable:
+ls -oh a.out

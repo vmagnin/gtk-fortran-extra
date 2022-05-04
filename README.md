@@ -43,6 +43,17 @@ $ cd my_fast_app
 $ ./with_GUI.sh
 ```
 
+### fpm
+
+For the moment, only the `unknown_pleasures` example can be built and run with the Fortran Package Manager:
+
+```bash
+$ cd unknown_pleasures
+$ fpm run
+```
+
+In that case, gtk-fortran will be cloned and built automatically by fpm.
+
 # References
 
 * Vincent MAGNIN, James TAPPIN, Jens HUNGER, Jerry DE LISLE, "gtk-fortran: a GTK+ binding to build Graphical User Interfaces in Fortran", _Journal of Open Source Software,_ 4(34), 1109, 12th January 2019, [https://doi.org/10.21105/joss.01109](https://doi.org/10.21105/joss.01109)

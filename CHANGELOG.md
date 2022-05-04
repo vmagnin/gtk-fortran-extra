@@ -2,6 +2,12 @@
 All notable changes to the project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [gtk-fortran-extra development]
+
+### Added
+- `unknown_pleasures/` can now also be built with the Fortran Package Manager fpm.
+- `unknown_pleasures/`: Cairo text was added on the figure. It can be deactivated with a boolean flag in the code.
+
 ## [gtk-fortran-extra 1.1.0] 2021-11-13
 
 ### Added

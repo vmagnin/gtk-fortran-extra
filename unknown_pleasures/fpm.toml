@@ -1,0 +1,15 @@
+name = "unknown_pleasures"
+description = "A demo drawing an Unknown Pleasures like figure using gtk-fortran"
+version = "1.2.0"
+license = "MIT"
+author = "Vincent Magnin"
+maintainer = "https://github.com/vmagnin/gtk-fortran-extra/issues"
+copyright = "Copyright 2021, Vincent Magnin"
+homepage = "https://github.com/vmagnin/gtk-fortran-extra"
+keywords = ["gtk-fortran"]
+
+[dependencies]
+gtk-fortran = { git = "https://github.com/vmagnin/gtk-fortran.git", branch = "gtk4" }
+
+# The list of the GTK libraries needed by the linker is declared
+# in the fpm.toml file of the gtk-fortran project.
