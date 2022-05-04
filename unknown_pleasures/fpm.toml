@@ -1,5 +1,5 @@
 name = "unknown_pleasures"
-description = "A demo drawing an Unknown Pleasures like figure using gtk-fortran"
+description = "A demo drawing an 'Unknown Pleasures' like figure using gtk-fortran"
 version = "1.2.0"
 license = "MIT"
 author = "Vincent Magnin"
