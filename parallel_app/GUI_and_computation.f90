@@ -277,7 +277,7 @@ module GUI_and_computation
     computing = .true.
 
     p = 0
-    max_iter = 400000000 / num_images()
+    max_iter = 800000000 / num_images()
 
     computation: do i = 1, max_iter
       ! A random point c in the plane:
