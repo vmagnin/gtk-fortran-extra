@@ -22,7 +22,7 @@ program Parallel_Buddhabrot
   !******************************************************************
   ! The window will stay opened after the computation, but we need to verify
   ! that the user has not closed the window during the computation.
-  ! https://developer.gnome.org/glib/stable/glib-The-Main-Event-Loop.html
+  ! https://docs.gtk.org/glib/main-loop.html
   !******************************************************************
   if ((this_image() == 1) .and. (run_status /= FALSE)) then
     ! Final update of the display:
