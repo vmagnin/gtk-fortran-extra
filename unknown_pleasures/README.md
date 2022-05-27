@@ -4,7 +4,7 @@ The origin of this work is the [Javascript version](https://github.com/MaxHalfor
 
 Bernard Sumner, the guitarist and keyboarder of Joy Division and future singer of New Order, found that figure in the *Cambridge Encyclopaedia of Astronomy* (1977) and ask the young [Peter Saville](https://en.wikipedia.org/wiki/Peter_Saville_(graphic_designer)) to  use it for the cover of their first album [_Unknown Pleasures_](https://en.wikipedia.org/wiki/Unknown_Pleasures) (1979).
 
-![Fortran generated Unknown Pleasures](Fortran_unknown_pleasures_text_medium.png)
+![Fortran generated Unknown Pleasures](screenshots/Fortran_unknown_pleasures_text_medium.png)
 	
 In Memoriam Ian Curtis (1956-1980).
 
