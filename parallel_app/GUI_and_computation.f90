@@ -89,59 +89,6 @@ module GUI_and_computation
   end subroutine destroy_signal
 
 
-  ! "It is called whenever GTK needs to draw the contents of the drawing area
-  ! to the screen."
-  ! https://docs.gtk.org/gtk4/method.DrawingArea.set_draw_func.html
-  subroutine my_draw_function1(widget, my_cairo_context, width, height, gdata) bind(c)
-    use cairo, only: cairo_paint
-    use gdk, only: gdk_cairo_set_source_pixbuf
-
-    type(c_ptr), value, intent(in)    :: widget, my_cairo_context, gdata
-    integer(c_int), value, intent(in) :: width, height
-
-    ! We redraw the pixbuf:
-    call gdk_cairo_set_source_pixbuf(my_cairo_context, my_pixbuf1, 0d0, 0d0)
-    call cairo_paint(my_cairo_context)
-  end subroutine my_draw_function1
-
-
-  ! Save a picture:
-  ! https://mail.gnome.org/archives/gtk-list/2004-October/msg00186.html
-  subroutine save_pixbuf(pixbuf, filename)
-    use gtk_os_dependent, only: gdk_pixbuf_savev
-
-    type(c_ptr), intent(in)      :: pixbuf
-    character(len=*), intent(in) :: filename
-    integer(c_int) :: cstatus
-    integer(c_int) :: message_id
-    character(80)  :: string
- 
-    cstatus = gdk_pixbuf_savev(pixbuf, filename//c_null_char, &
-              & "png"//c_null_char, c_null_ptr, c_null_ptr, c_null_ptr)
-
-    if (cstatus == TRUE) then
-      string = "Successfully saved: "//filename//c_null_char
-    else
-      string = "Failed"//c_null_char
-    end if
-
-    message_id = gtk_statusbar_push (statusBar, gtk_statusbar_get_context_id(&
-                       & statusBar, "Saved"//c_null_char), TRIM(string))
-  end subroutine save_pixbuf
-
-
-  subroutine print_text_view(string)
-    character(len=*), intent(in) :: string
-    call gtk_text_buffer_insert_at_cursor(buffer, trim(string)//c_new_line//c_null_char, -1_c_int)
-
-    ! Managing the scroll:
-    call gtk_text_buffer_get_end_iter (buffer, c_loc(text_iter))
-    ! To avoid horizontal scrolling:
-    call gtk_text_iter_set_line_offset (c_loc(text_iter), 0_c_int)
-    call gtk_text_buffer_move_mark (buffer, text_mark, c_loc(text_iter))
-    call gtk_text_view_scroll_mark_onscreen (textView, text_mark)
-  end subroutine
-
   ! This function is needed to update the GUI during long computations.
   subroutine pending_events()
     do while(IAND(g_main_context_pending(c_null_ptr), run_status) /= FALSE)
@@ -168,10 +115,63 @@ module GUI_and_computation
   end subroutine
 
 
+  ! "It is called whenever GTK needs to draw the contents of the drawing area
+  ! to the screen."
+  ! https://docs.gtk.org/gtk4/method.DrawingArea.set_draw_func.html
+  subroutine my_draw_function1(widget, my_cairo_context, width, height, gdata) bind(c)
+    use cairo, only: cairo_paint
+    use gdk, only: gdk_cairo_set_source_pixbuf
+
+    type(c_ptr), value, intent(in)    :: widget, my_cairo_context, gdata
+    integer(c_int), value, intent(in) :: width, height
+
+    ! We redraw the pixbuf:
+    call gdk_cairo_set_source_pixbuf(my_cairo_context, my_pixbuf1, 0d0, 0d0)
+    call cairo_paint(my_cairo_context)
+  end subroutine my_draw_function1
+
+
+  ! Save a picture:
+  ! https://mail.gnome.org/archives/gtk-list/2004-October/msg00186.html
+  subroutine save_pixbuf(pixbuf, filename)
+    use gdk_pixbuf, only: gdk_pixbuf_savev
+
+    type(c_ptr), intent(in)      :: pixbuf
+    character(len=*), intent(in) :: filename
+    integer(c_int) :: cstatus
+    integer(c_int) :: message_id
+    character(80)  :: string
+ 
+    cstatus = gdk_pixbuf_savev(pixbuf, filename//c_null_char, &
+              & "png"//c_null_char, c_null_ptr, c_null_ptr, c_null_ptr)
+
+    if (cstatus == TRUE) then
+      string = "Successfully saved: "//filename//c_null_char
+    else
+      string = "Failed"//c_null_char
+    end if
+
+    message_id = gtk_statusbar_push (statusBar, gtk_statusbar_get_context_id(&
+                       & statusBar, "Saved"//c_null_char), trim(string))
+  end subroutine save_pixbuf
+
+
+  subroutine print_text_view(string)
+    character(len=*), intent(in) :: string
+
+    call gtk_text_buffer_insert_at_cursor(buffer, trim(string)//c_new_line//c_null_char, -1_c_int)
+    ! Managing the scroll:
+    call gtk_text_buffer_get_end_iter (buffer, c_loc(text_iter))
+    ! To avoid horizontal scrolling:
+    call gtk_text_iter_set_line_offset (c_loc(text_iter), 0_c_int)
+    call gtk_text_buffer_move_mark (buffer, text_mark, c_loc(text_iter))
+    call gtk_text_view_scroll_mark_onscreen (textView, text_mark)
+  end subroutine
+
+
   subroutine initialize_GUI
     use gdk_pixbuf, only: gdk_pixbuf_get_n_channels, gdk_pixbuf_get_pixels, &
                       & gdk_pixbuf_get_rowstride, gdk_pixbuf_new
-    use gtk_os_dependent, only: gdk_pixbuf_savev
 
     integer(c_int) :: message_id
     ! Pointers toward our GTK widgets:
@@ -186,11 +186,6 @@ module GUI_and_computation
                         & c_funloc(destroy_signal))
     call gtk_window_set_title(my_window, "A parallel gtk-fortran application"//c_null_char)
 
-    ! Properties of the main window :
-!    width  = 1000
-!    height = 900
-!    call gtk_window_set_default_size(my_window, width, height)
- 
     !******************************************************************
     ! Adding widgets in the window:
     !******************************************************************
@@ -198,7 +193,6 @@ module GUI_and_computation
     ! A table container will contain buttons and labels:
     table = gtk_grid_new ()
     call gtk_grid_set_column_homogeneous(table, TRUE)
-    !call gtk_grid_set_row_homogeneous(table, TRUE)
     call gtk_grid_set_column_spacing(table, 5_c_int)
     call gtk_grid_set_row_spacing(table, 5_c_int)
 
@@ -252,7 +246,7 @@ module GUI_and_computation
     call gtk_window_set_child(my_window, box1)
     call gtk_widget_show(my_window)
 
-    ! We create a pixbuffer to store the pixels the image:
+    ! We create a pixbuffer to store the pixels of the image:
     my_pixbuf1 = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8_c_int, pixwidth, pixheight)
     nch = gdk_pixbuf_get_n_channels(my_pixbuf1)
     rowstride = gdk_pixbuf_get_rowstride(my_pixbuf1)
@@ -263,6 +257,7 @@ module GUI_and_computation
 
     ! If you don't show it, nothing will appear on screen...
     call gtk_widget_show(my_window)
+
   end subroutine initialize_GUI
 
 
@@ -270,22 +265,24 @@ module GUI_and_computation
     character(len=200) :: s       ! String for text printing
     integer(int16) :: grey        ! Intensity of a pixel
     integer(int64) :: i, max_iter ! Main loop
-    integer(int32) :: k           ! Loop counter for the sequence
-    integer(int32), parameter :: iterations = 200
+    integer(int32) :: k           ! Loop counter for the Mandelbrot sequence
+    integer(int32), parameter :: iterations = 200   ! Maximum iterations
     real(wp)       :: rx, ry      ! Random numbers
-    complex(wp)    :: c
-    complex(wp), dimension(0:iterations) :: z
+    complex(wp)    :: c           ! First term of the Mandelbrot sequence
+    complex(wp), dimension(0:iterations) :: z     ! To memorize the sequence
+    ! Arrays to count the number of visits of the sequence in each pixel:
     integer(int32), dimension(0:pixwidth-1, 0:pixheight-1) :: p, backup
     integer(int32) :: ii, jj      ! Pixbuffer coordinates
     integer        :: counter     ! Event counter
 
+    ! It's time for Science!
     computing = .true.
 
     p = 0
     max_iter = 800000000 / num_images()
 
     computation: do i = 1, max_iter
-      ! A random point c in the plane:
+      ! A random point c in the complex plane:
       call random_number(rx)
       call random_number(ry)
       c = cmplx(-2.0_wp + 3.0_wp * rx, -1.5_wp + 3.0_wp * ry, kind=wp)
@@ -298,13 +295,14 @@ module GUI_and_computation
 
       ! The intensity of a pixel is proportionnal to the number of times this
       ! pixel was visited. We consider only sequences where c is not in the
-      ! Mandelrot set:
+      ! Mandelbrot set:
       if (real(z(iterations))**2 + aimag(z(iterations))**2 >= 4.0_wp) then
         do k = 2, iterations
           ii = nint((real(z(k))  + 2.0_wp) / (3.0_wp / pixwidth))
           if ((ii >= 0) .and. (ii < pixwidth)) then
             jj = nint((aimag(z(k)) + 1.5_wp) / (3.0_wp / pixheight))
             if ((jj >= 0) .and. (jj < pixheight)) then
+              ! This pixel has been visited by z:
               p(ii,jj) = p(ii,jj) + 1
             end if
           end if
@@ -312,17 +310,16 @@ module GUI_and_computation
       end if
 
       ! **************************************************************************
-      ! Needed if you want to display progressively the result during computation.
-      ! We provoke a draw event only once in a while to avoid degrading
+      ! Displays progressively the result during computation. Using mod()
+      ! we provoke a draw event only once in a while to avoid degrading
       ! the performances. We don't use cpu_time() for the same reason.
       ! **************************************************************************
       if (mod(i, 10*int(pixwidth*pixheight, kind=int64)) == 0) then
 
-        !print *, "image_status(1)", image_status(1)
-
+        ! Does image 1 closed the GTK window?
         call event_query(stop_notification, counter)
         print '(A, I3, A, I3)', "I am image", this_image(), " ; event counter", counter
-        if (counter /=0) exit computation
+        if (counter /=0) return
 
         if (this_image() == 1) then
           ! That backup is needed because all p arrays will be summed in the
@@ -330,9 +327,12 @@ module GUI_and_computation
           backup = p(:,:)
         end if
 
+        ! Like in astrophotography, we sum the pictures computed by each
+        ! Fortran image to obtain a detailed picture of the Buddhabrot:
         print '(A, I3, A)', "I am image", this_image(), " doing co_sum(p, 1)"
         call co_sum(p, 1)
 
+        ! Let's display it in the GTK window:
         if (this_image() == 1) then
           do ii = 0, pixwidth-1
             do jj = pixheight-1, 0, -1
@@ -342,12 +342,13 @@ module GUI_and_computation
             end do
           end do
           call gtk_widget_queue_draw(my_drawing_area1)
+          ! Preparing image 1 for the next co_sum():
           p(:,:) = backup
         end if
       end if
 
       ! You also need, more often, to manage the GTK events during computation if you
-      ! want the GUI to be reactive:
+      ! want the GUI to be reactive to user actions (like closing the window):
       if ((this_image() == 1) .and. (mod(i, int(pixwidth*pixheight, kind=int64)) == 0)) then
         call pending_events()
         if (run_status == FALSE) return ! Exit if we had a destroy signal.
