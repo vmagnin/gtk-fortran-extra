@@ -1,6 +1,6 @@
 !------------------------------------------------------------------------------
 ! Contributed by Vincent Magnin
-! Last modifications: vmagnin 2022-05-27
+! Last modifications: vmagnin 2022-05-30
 ! MIT license
 !------------------------------------------------------------------------------
 
@@ -51,10 +51,6 @@ module GUI_and_computation
   integer(c_int) :: nch, rowstride
   integer(c_int), parameter :: pixwidth  = 800
   integer(c_int), parameter :: pixheight = 800
-  ! run_status is TRUE until the user closes the top window:
-  integer(c_int)   :: run_status = TRUE
-  logical          :: computing = .false.
-  type(event_type) :: stop_notification[*]
 
   type(c_ptr)    :: my_drawing_area1
   integer(c_int) :: boolresult
@@ -63,6 +59,15 @@ module GUI_and_computation
   type(c_ptr) :: buffer
   ! That type is defined in the gtk_sup module:
   type(gtktextiter), target :: text_iter
+
+  ! run_status is TRUE until the user closes the top window:
+  integer(c_int)   :: run_status = TRUE
+  ! computing will be set to .true. at the beginning of the scientific computation
+  ! and .false. at the end.
+  logical          :: computing = .false.
+  ! That event variable will be used to tell other images that the GTK window
+  ! has been closed by image 1:
+  type(event_type) :: stop_notification[*]
 
   contains
 
