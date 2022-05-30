@@ -26,13 +26,6 @@ $ ifort -O3 -coarray GUI_and_computation.f90  main.f90 && ./a.out
 
 Tested on a PC with Intel(R) Core(TM) i7-5500U CPU @ 2.40GHz (dual core bi-thread)
 
-## Remaining problem
-
-When you close the GTK window, the Fortran images still run and burn the CPU. You must stop them with CTRL+C.
-
-**Work in progress...**
-
-
 ## Bibliography
 
 * Curcic, Milan. [Modern Fortran - Building efficient parallel applications](https://learning.oreilly.com/library/view/-/9781617295287/?ar), Manning Publications, 1st edition, novembre 2020, ISBN 978-1-61729-528-7.
