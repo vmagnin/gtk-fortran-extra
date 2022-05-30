@@ -325,12 +325,10 @@ module GUI_and_computation
           backup = p(:,:)
         end if
 
-        sync all
+        print '(A, I3, A)', "I am image", this_image(), " doing co_sum(p, 1)"
         call co_sum(p, 1)
-        print *, "sync all:", this_image()
 
         if (this_image() == 1) then
-          print *, "co_sum"
           do ii = 0, pixwidth-1
             do jj = pixheight-1, 0, -1
               grey = int(min(p(ii,jj), 255), kind=int16)
