@@ -2,7 +2,7 @@
 
 The origin of this work is the [Javascript version](https://github.com/MaxHalford/procedural-art/blob/master/3_unknown_pleasures.html) created by Max Halford, and published under the MIT license. He explains on his [blog](https://maxhalford.github.io/blog/unknown-pleasures/) how he progressively designed his algorithm to draw figures similar to the [iconic figure](http://cococubed.asu.edu/pix_pages/joy_division_unknown_pleasures.shtml) "Many consecutive pulses from CP 1919" of Harold D. Craft's Ph.D. thesis. [CP 1919](https://en.wikipedia.org/wiki/PSR_B1919%2B21) is the first discovered pulsar, by the Ph.D. student [Jocelyn Bell](https://en.wikipedia.org/wiki/Jocelyn_Bell_Burnell) in 1967.
 
-Bernard Sumner, the guitarist and keyboarder of Joy Division and future singer of New Order, found that figure in the *Cambridge Encyclopaedia of Astronomy* (1977) and ask the young [Peter Saville](https://en.wikipedia.org/wiki/Peter_Saville_(graphic_designer)) to  use it for the cover of their first album [_Unknown Pleasures_](https://en.wikipedia.org/wiki/Unknown_Pleasures) (1979).
+Bernard Sumner, the guitarist and keyboarder of Joy Division and future singer of New Order, found that figure in the *Cambridge Encyclopaedia of Astronomy* (1977) and asked the young [Peter Saville](https://en.wikipedia.org/wiki/Peter_Saville_(graphic_designer)) to  use it for the cover of their first album [_Unknown Pleasures_](https://en.wikipedia.org/wiki/Unknown_Pleasures) (1979).
 
 ![Fortran generated Unknown Pleasures](screenshots/Fortran_unknown_pleasures_text_medium.png)
 	
