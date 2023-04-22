@@ -1,6 +1,6 @@
 # gtk-fortran extra examples
 
-**These examples are under MIT license** (contrarily to the gtk-fortran repository which is under GPL), so you can begin working on your own gtk-fortran application without worrying about license problems. You can pick an app and adapt it to your own needs.
+**These examples are under MIT license** (contrarily to the [gtk-fortran](https://github.com/vmagnin/gtk-fortran/wiki) repository which is under GPL), so you can begin working on your own gtk-fortran application without worrying about license problems. You can pick an app and adapt it to your own needs.
 
 ## The applications
 
