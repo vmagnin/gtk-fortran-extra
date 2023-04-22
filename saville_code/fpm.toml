@@ -1,0 +1,15 @@
+name = "saville_code"
+description = "Encode a text with Peter Saville's color code"
+version = "1.0.0"
+license = "MIT"
+author = "Vincent Magnin"
+maintainer = "https://github.com/vmagnin/gtk-fortran-extra/issues"
+copyright = "Copyright 2023, Vincent Magnin"
+homepage = "https://github.com/vmagnin/gtk-fortran-extra/saville_code"
+keywords = ["gtk-fortran"]
+
+[dependencies]
+gtk-fortran = { git = "https://github.com/vmagnin/gtk-fortran.git", branch = "gtk4" }
+
+# The list of the GTK libraries needed by the linker is declared
+# in the fpm.toml file of the gtk-fortran project.

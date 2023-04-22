@@ -10,6 +10,7 @@ Each application is in a directory:
 * `my_long_app`: a gtk-fortran application for long computations, with a picture that is updated regularly. In that case you can not declare a GtkApplication: you must manage the events of the GLib main loop to keep the GUI reactive during the computation. The application is drawing a [Buddhabrot](https://en.wikipedia.org/wiki/Buddhabrot). The command line version will finally save a picture in [portable pixmap format (PPM)](https://en.wikipedia.org/wiki/Netpbm#File_formats).
 * `parallel_app/` demonstrates how you can use parallel Fortran 2008 and 2018 features (coarrays, collective routines...) in a gtk-fortran application. It draws a Buddhabrot.
 * `unknown_pleasures/`: a Fortran generator of figures similar to the iconic Joy Division's *Unknown Pleasures* cover.
+* `saville_code/`: a gtk-fortran application to encode a text using Peter Saville's color code.
 
 You can see the windows of those apps in the `screenshots/` directory.
 
@@ -40,13 +41,17 @@ Typically, you need to type in your terminal:
 ```bash
 $ git clone git@github.com:vmagnin/gtk-fortran-extra.git
 $ cd gtk-fortran-extra
+```
+
+then go into the directory of an application and launch the build script:
+```bash
 $ cd my_fast_app
 $ ./with_GUI.sh
 ```
 
 ### fpm
 
-For the moment, only the `unknown_pleasures` example can be built and run with the Fortran Package Manager:
+For the moment, only the `unknown_pleasures` and `saville_code` examples can be built and run with the Fortran Package Manager:
 
 ```bash
 $ cd unknown_pleasures
