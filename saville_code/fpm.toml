@@ -1,6 +1,6 @@
 name = "saville_code"
 description = "Encode a text with Peter Saville's color code"
-version = "1.0.0"
+version = "1.1.0"
 license = "MIT"
 author = "Vincent Magnin"
 maintainer = "https://github.com/vmagnin/gtk-fortran-extra/issues"

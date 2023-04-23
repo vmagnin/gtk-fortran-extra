@@ -21,7 +21,7 @@
 ! SOFTWARE.
 !-------------------------------------------------------------------------------
 ! Contributed by Vincent Magnin: 2023-03-26
-! Last modification: vmagnin 2023-04-20
+! Last modification: vmagnin 2023-04-23
 !-------------------------------------------------------------------------------
 
 module gui
@@ -44,11 +44,14 @@ module gui
     & gtk_spin_button_set_value, gtk_spin_button_get_value, &
     & gtk_statusbar_new, gtk_statusbar_push, gtk_statusbar_get_context_id, &
     & gtk_toggle_button_new_with_label, gtk_toggle_button_set_group, &
-    & gtk_toggle_button_set_active, gtk_toggle_button_get_active, TRUE
+    & gtk_toggle_button_set_active, gtk_toggle_button_get_active, TRUE, &
+    & CAIRO_SVG_VERSION_1_2
 
     use cairo, only: cairo_get_target, cairo_line_to, cairo_move_to, &
     & cairo_set_line_width, cairo_set_source_rgb, &
-    & cairo_surface_write_to_png, cairo_rectangle, cairo_fill
+    & cairo_surface_write_to_png, cairo_rectangle, cairo_fill, &
+    & cairo_svg_surface_create, cairo_svg_surface_restrict_to_version, &
+    & cairo_surface_destroy, cairo_create, cairo_destroy
 
     use grapheme_class
 
@@ -167,10 +170,10 @@ contains
     ! "It is called whenever GTK needs to draw the contents of the drawing area
     ! to the screen."
     ! cr is the Cairo context
-    subroutine my_draw_function(widget, cr, width, height, gdata) bind(c)
+    subroutine my_draw_function(widget, cr_screen, width, height, gdata) bind(c)
         use gtk_sup, only: c_f_string_copy_alloc
 
-        type(c_ptr), value, intent(in)    :: widget, cr, gdata
+        type(c_ptr), value, intent(in)    :: widget, cr_screen, gdata
         integer(c_int), value, intent(in) :: width, height
         integer(c_int) :: maxi
         integer        :: i
@@ -182,25 +185,23 @@ contains
         integer     :: cstatus
         integer(c_int) :: message_id
         character(:), allocatable :: my_string, filename
-
-        ! Black background:
-        call cairo_set_source_rgb(cr, 0.0_dp, 0.0_dp, 0.0_dp)
-        call cairo_rectangle(cr, 0.0_dp, 0.0_dp, real(width, KIND=dp), real(height, KIND=dp))
-        call cairo_fill(cr)
+        integer :: rendering
+        type(c_ptr) :: surface_svg, cr_svg, cr
 
         ! The string to encode:
         buffer = gtk_entry_get_buffer(entry1)
         call c_f_string_copy_alloc(gtk_entry_buffer_get_text(buffer), my_string)
         filename = my_string
 
+        if (len(my_string) == 0) then
+            print *, "Empty string => no drawing"
+            return
+        end if
+
         ! Width of a square:
         w = gtk_spin_button_get_value(spinButton1)
         ! Line spacing:
         ls = gtk_spin_button_get_value(spinButton2)
-
-        ! Starting position at top left:
-        y = 2*w
-        x = 2*w
 
         ! Is the text horizontal (default) or vertical?
         horizontal = (gtk_toggle_button_get_active(toggleButtonH) == TRUE)
@@ -212,36 +213,66 @@ contains
             maxi = height
         end if
 
-        do i = 1, len(my_string)
-            ! The PNG filename should not contain spaces:
-            if (my_string(i:i) == " ") filename(i:i) = "_"
-            ! End of line?
-            if (x > maxi - 3*w) then
-                ! Line feed:
-                y = y + w + ls
-                ! Carriage return:
-                x = 2*w
-            end if
-            ! Draw the character i:
-            if (horizontal) then
-                graph = Grapheme(name=my_string(i:i), x=x, y=y, width=w, cr=cr)
+        ! We will draw two times, once for screen, once in a SVG file:
+        do rendering = 1, 2
+
+            if (rendering == 1) then
+                ! Rendering on screen:
+                cr = cr_screen
             else
-                graph = Grapheme(name=my_string(i:i), x=y, y=x, width=w, cr=cr)
+                ! Rendering in a SVG file:
+                surface_svg = cairo_svg_surface_create(filename//".svg"//c_null_char, &
+                                        & real(width, KIND=dp), real(height, KIND=dp))
+                cr_svg = cairo_create(surface_svg)
+                call cairo_svg_surface_restrict_to_version(surface_svg, CAIRO_SVG_VERSION_1_2)
+                cr = cr_svg
             end if
-            call graph%draw()
 
-            ! Next position:
-            x = x + w
-        end do
+            ! Black background:
+            call cairo_set_source_rgb(cr, 0.0_dp, 0.0_dp, 0.0_dp)
+            call cairo_rectangle(cr, 0.0_dp, 0.0_dp, real(width, KIND=dp), real(height, KIND=dp))
+            call cairo_fill(cr)
 
-        ! Save the image as a PNG:
-        if (len(my_string) /= 0) then
-            print '("Saving the PNG file: ", I0, " x ", I0, " pixels")', width, height
+            ! Starting position at top left:
+            y = 2*w
+            x = 2*w
+
+            do i = 1, len(my_string)
+                ! The PNG filename should not contain spaces:
+                if (my_string(i:i) == " ") filename(i:i) = "_"
+                ! End of line?
+                if (x > maxi - 3*w) then
+                    ! Line feed:
+                    y = y + w + ls
+                    ! Carriage return:
+                    x = 2*w
+                end if
+                ! Draw the character i:
+                if (horizontal) then
+                    graph = Grapheme(name=my_string(i:i), x=x, y=y, width=w, cr=cr)
+                else
+                    graph = Grapheme(name=my_string(i:i), x=y, y=x, width=w, cr=cr)
+                end if
+                call graph%draw()
+
+                ! Next position:
+                x = x + w
+            end do
+
+            if (rendering == 1) then
+                ! Screen
+                print '("Saving the PNG file: ", I0, " x ", I0, " pixels")', width, height
+                cstatus = cairo_surface_write_to_png(cairo_get_target(cr), &
+                                            & filename//".png"//c_null_char)
+                call cairo_destroy(cr_screen)
+            else
+                ! SVG
+                call cairo_surface_destroy(surface_svg)
+            end if
+
             message_id = gtk_statusbar_push(statusBar, gtk_statusbar_get_context_id(statusBar, &
-                       & "Saville"//c_null_char), "Image saved: "//filename//".png"//c_null_char)
-            cstatus = cairo_surface_write_to_png(cairo_get_target(cr), &
-                                               & filename//".png"//c_null_char)
-        end if
+                & "Saville"//c_null_char), "Image saved: "//filename//".png and "//filename//".svg"//c_null_char)
+        end do
     end subroutine my_draw_function
 
 

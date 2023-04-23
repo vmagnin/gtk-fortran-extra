@@ -11,7 +11,7 @@ Remark: depending on the sources available on the Web, the 0 character is either
 
 ## Fortran implementation
 
-This Fortran implementation of Saville's color code is based on [gtk-fortran](https://github.com/vmagnin/gtk-fortran/wiki) (GTK 4), and especially its [Cairo graphics library](https://www.cairographics.org/).
+This Fortran implementation of Saville's color code is based on [gtk-fortran](https://github.com/vmagnin/gtk-fortran/wiki) (GTK 4), and especially its [Cairo graphics library](https://www.cairographics.org/). The image is saved both in a PNG file and a SVG file.
 
 ### Color class
 
@@ -64,7 +64,7 @@ but in that case **gtk-fortran must be compiled with the same compiler.**
 
 ## Perspectives
 
-* A SVG output would be interesting.
+* ...
 
 ## Contributing
 
