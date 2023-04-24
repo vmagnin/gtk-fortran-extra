@@ -10,7 +10,7 @@ In Memoriam Ian Curtis (1956-1980).
 
 ## Build and run
 
-Our Fortran version uses [gtk-fortran](https://github.com/vmagnin/gtk-fortran/wiki) (GTK 4), and especially its [Cairo graphics library](https://www.cairographics.org/).
+Our Fortran version uses [gtk-fortran](https://github.com/vmagnin/gtk-fortran/wiki) (GTK 4), and especially its [Cairo graphics library](https://www.cairographics.org/). The image is shown on screen, saved in a PNG file, a SVG file and a PDF file.
 
 ### With fpm
 
@@ -58,7 +58,6 @@ $ ./a.out
 ## Perspectives
 
 * An animated version could be interesting. It could use a FIFO stack to store each line of the signal. Or maybe we could get and put the pseudo-random seed using `call random_seed()` in order to shift lines in the next frame.
-* A SVG output.
 
 ## Contributing
 

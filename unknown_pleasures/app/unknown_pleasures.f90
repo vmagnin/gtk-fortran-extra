@@ -22,7 +22,7 @@
 ! SOFTWARE.
 !-------------------------------------------------------------------------------
 ! Fortran version contributed by Vincent Magnin: 2021-11-02
-! Last modification: vmagnin 2022-05-03
+! Last modification: vmagnin 2023-04-24
 !-------------------------------------------------------------------------------
 
 module handlers
@@ -33,14 +33,17 @@ module handlers
   & gtk_drawing_area_set_content_width, gtk_drawing_area_set_content_height, &
   & gtk_drawing_area_set_draw_func, gtk_window_set_child, gtk_widget_show, &
   & gtk_window_set_default_size, gtk_window_set_title, &
-  & FALSE, CAIRO_ANTIALIAS_BEST, &
+  & FALSE, CAIRO_SVG_VERSION_1_2, CAIRO_ANTIALIAS_BEST, &
   & CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL
 
   use cairo, only: cairo_get_target, cairo_line_to, cairo_move_to, &
   & cairo_set_line_width, cairo_set_source_rgb, cairo_stroke, &
   & cairo_surface_write_to_png, cairo_rectangle, cairo_fill, &
   & cairo_set_antialias, cairo_fill_preserve, &
-  & cairo_select_font_face, cairo_set_font_size, cairo_show_text
+  & cairo_select_font_face, cairo_set_font_size, cairo_show_text, &
+  & cairo_svg_surface_create, &
+  & cairo_svg_surface_restrict_to_version, cairo_surface_destroy, &
+  & cairo_pdf_surface_create, cairo_create, cairo_destroy
 
   use random
 
@@ -77,17 +80,66 @@ contains
 
   ! "It is called whenever GTK needs to draw the contents of the drawing area
   ! to the screen."
-  ! cr is the Cairo context
-  subroutine my_draw_function(widget, cr, width, height, gdata) bind(c)
-    type(c_ptr), value, intent(in)    :: widget, cr, gdata
+  subroutine my_draw_function(widget, my_cairo_context, width, height, gdata) bind(c)
+    type(c_ptr), value, intent(in)    :: widget, my_cairo_context, gdata
     integer(c_int), value, intent(in) :: width, height
-    integer                           :: cstatus
+    integer :: cstatus
+    integer :: rendering
+    type(c_ptr) :: surface_svg, surface_pdf, cr_svg, cr_pdf
+    integer(4), allocatable, dimension (:) :: my_seed
+    integer :: seed_size
+
+    ! Needed to obtain three times the same figure:
+    call random_seed(size=seed_size)
+    allocate(my_seed(1:seed_size))
+    call random_seed(get=my_seed(1:seed_size))
+
+    ! We will draw three times, once for screen, once in a SVG file
+    ! and once in a PDF file:
+    do rendering = 1, 3
+      if (rendering == 1) then
+        ! Rendering on screen:
+        call draw(my_cairo_context, width, height)
+        ! Save the image as a PNG:
+        cstatus = cairo_surface_write_to_png(cairo_get_target(my_cairo_context), &
+                                          & "Fortran_unknown_pleasures.png"//c_null_char)
+        call cairo_destroy(my_cairo_context)
+        print *, "Saved in Fortran_unknown_pleasures.png"
+      else if (rendering == 2) then
+        ! Rendering the same figure in a SVG file:
+        call random_seed(put=my_seed(1:seed_size))
+        surface_svg = cairo_svg_surface_create("Fortran_unknown_pleasures.svg"//c_null_char, &
+                                  & real(width, KIND=dp), real(height, KIND=dp))
+        cr_svg = cairo_create(surface_svg)
+        call cairo_svg_surface_restrict_to_version(surface_svg, CAIRO_SVG_VERSION_1_2)
+        call draw(cr_svg, width, height)
+        call cairo_destroy(cr_svg)
+        call cairo_surface_destroy(surface_svg)
+        print *, "Saved in Fortran_unknown_pleasures.svg"
+      else
+        ! Rendering the same figure in a PDF file:
+        call random_seed(put=my_seed(1:seed_size))
+        surface_pdf = cairo_pdf_surface_create("Fortran_unknown_pleasures.pdf"//c_null_char, &
+                                  & real(width, KIND=dp), real(height, KIND=dp))
+        cr_pdf = cairo_create(surface_pdf)
+        call draw(cr_pdf, width, height)
+        call cairo_surface_destroy(surface_pdf)
+        print *, "Saved in Fortran_unknown_pleasures.pdf"
+      end if
+    end do
+  end subroutine my_draw_function
+
+
+  ! It will be called three times, for screen, SVG and PDF files:
+  subroutine draw(cr, width, height)
+    type(c_ptr), value, intent(in)    :: cr
+    integer(c_int), value, intent(in) :: width, height
     integer :: xMin, xMax, yMin, yMax, yShift
     integer :: nLines, nPoints, nModes
     integer, parameter :: nModesMax = 5
     real(dp), dimension(0:nModesMax-1) :: mus, sigmas
     real(dp) :: mx, dx, dy, x, y, w, noise, yy
-    integer :: i, j, k, l
+    integer  :: i, j, k, l
     real(dp) :: r1, r2
 
     ! Black background:
@@ -175,15 +227,8 @@ contains
       call cairo_move_to(cr, width/2.0_dp - 17*17.6_dp, (height - 110 + yShift)*1.0_dp)
       call cairo_show_text(cr, "UNKNOWN PLEASURES"//c_null_char)
     end if
-
-    ! Save the image as a PNG:
-    print '("Saving the PNG file: ", I0, " x ", I0, " pixels")', width, height
-    cstatus = cairo_surface_write_to_png(cairo_get_target(cr), &
-                    & "Fortran_unknown_pleasures.png"//c_null_char)
-
-  end subroutine my_draw_function
+  end subroutine draw
 end module handlers
-
 
 ! We create a GtkApplication:
 program unknown_pleasures

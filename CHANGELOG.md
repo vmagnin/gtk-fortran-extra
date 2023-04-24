@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - `saville_code/`: now saves also the image in a SVG file.
+- `unknown_pleasures/`: now saves also the image in a SVG file and a PDF file.
 
 ## [gtk-fortran-extra 1.2.0] 2023-04-22
 
