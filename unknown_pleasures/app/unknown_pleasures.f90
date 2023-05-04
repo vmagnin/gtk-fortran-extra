@@ -22,7 +22,7 @@
 ! SOFTWARE.
 !-------------------------------------------------------------------------------
 ! Fortran version contributed by Vincent Magnin: 2021-11-02
-! Last modification: vmagnin 2023-04-24
+! Last modification: vmagnin 2023-05-04
 !-------------------------------------------------------------------------------
 
 module handlers
@@ -52,6 +52,8 @@ module handlers
   real(dp), parameter :: factor = 1.7_dp
   ! With or without text?
   logical, parameter  :: with_text = .true.
+  ! B&W or Purple&White?
+  logical, parameter  :: BW = .false.
 
 contains
 
@@ -142,14 +144,25 @@ contains
     integer  :: i, j, k, l
     real(dp) :: r1, r2
 
-    ! Black background:
-    call cairo_set_source_rgb(cr, 0.0_dp, 0.0_dp, 0.0_dp)
+    ! Background:
+    if (BW) then
+      ! Black
+      call cairo_set_source_rgb(cr, 0.0_dp, 0.0_dp, 0.0_dp)
+    else
+      ! Fortran Purple
+      call cairo_set_source_rgb(cr, 0.451_dp, 0.310_dp, 0.588_dp)
+    end if
     call cairo_set_line_width(cr, 0.0_dp)
     call cairo_rectangle(cr, 0.0_dp, 0.0_dp, real(width, KIND=dp), real(height, KIND=dp))
     call cairo_fill(cr)
 
     ! Settings for the lines:
-    call cairo_set_line_width(cr, 1.5_dp)
+    if (BW) then
+      call cairo_set_line_width(cr, 1.5_dp)
+    else
+      ! To increase the contrast in the purple version:
+      call cairo_set_line_width(cr, 2.5_dp)
+    end if
     call cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST)
 
     ! If the text is printed, the whole figure is shifted downward:
@@ -202,7 +215,13 @@ contains
       end do
 
       ! Cover the previous lines with black:
-      call cairo_set_source_rgb(cr, 0.0_dp, 0.0_dp, 0.0_dp)
+      if (BW) then
+        ! Black
+        call cairo_set_source_rgb(cr, 0.0_dp, 0.0_dp, 0.0_dp)
+      else
+        ! Fortran Purple
+        call cairo_set_source_rgb(cr, 0.451_dp, 0.310_dp, 0.588_dp)
+      end if
       call cairo_fill_preserve(cr)
       ! Draw the current line in white:
       call cairo_set_source_rgb(cr, 1.0_dp, 1.0_dp, 1.0_dp)
@@ -216,8 +235,15 @@ contains
     if (with_text) then
       ! Text in white:
       call cairo_set_source_rgb(cr, 1.0_dp, 1.0_dp, 1.0_dp)
-      call cairo_select_font_face(cr, "DejaVu Sans Light"//c_null_char, &
-                              & CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL)
+
+      if (BW) then
+        call cairo_select_font_face(cr, "DejaVu Sans Light"//c_null_char, &
+                        & CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL)
+      else
+        ! To increase the contrast in the purple version:
+        call cairo_select_font_face(cr, "DejaVu Sans"//c_null_char, &
+                        & CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL)
+      end if
 
       call cairo_set_font_size(cr, 100.0_dp)
       call cairo_move_to(cr, width/2.0_dp - 7*26.5_dp, (100 + yShift)*1.0_dp)
