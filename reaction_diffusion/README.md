@@ -40,6 +40,7 @@ The program is displaying the evolution of the system in a GTK window and writes
 $ ffmpeg -i image%05d.png -y -r 24 -crf 17 turing.mp4
 ```
 
+The movie is available on YouTube: https://www.youtube.com/watch?v=cVHLCVVvZ4U
 
 ## License
 
