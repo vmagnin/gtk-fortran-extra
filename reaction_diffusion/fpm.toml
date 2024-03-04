@@ -1,0 +1,16 @@
+name = "reaction_diffusion"
+description = "A demo using gtk-fortran and ForColormap & ForImage as fpm dependencies"
+version = "1.0.0"
+license = "MIT"
+author = "Vincent Magnin"
+maintainer = "Vincent Magnin"
+copyright = "Copyright 2024, Vincent Magnin"
+homepage = "https://github.com/vmagnin/gtk-fortran-extra/tree/main/reaction_diffusion"
+keywords = ["gtk-fortran", "forcolormap", "forimage"]
+
+[dependencies]
+# The list of the GTK libraries needed by the linker is declared
+# in the fpm.toml file of the gtk-fortran project.
+gtk-fortran = { git = "https://github.com/vmagnin/gtk-fortran.git", branch = "gtk4" }
+# ForColormap itself depends on ForImage.
+forcolormap = { git = "https://github.com/vmagnin/forcolormap.git" }

@@ -2,9 +2,10 @@
 All notable changes to the project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [gtk-fortran-extra dev]
+## [gtk-fortran-extra 1.3.0] 2024-03-04
 
 ### Added
+- `reaction_diffusion/`: a gtk-fortran application using [ForColormap](https://github.com/vmagnin/forcolormap) to create a movie with Turing patterns, displayed with various colormaps.
 - `saville_code/`: now saves also the image in a SVG file.
 - `unknown_pleasures/`: now saves also the image in a SVG file and a PDF file.
 
