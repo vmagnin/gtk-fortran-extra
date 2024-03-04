@@ -21,7 +21,7 @@ You can see the windows of those apps in the `screenshots/` directory.
 
 The gtk-4-fortran library must be installed on your machine, with its dev files. You will also need git:
 ```bash
-$ sudo apt install libgtk-4-dev cmake git
+$ sudo apt install libgtk-4-dev git
 ```
 
 Some examples can be built directly with fpm. For the others, you need to build gtk-fortran and install the library in your system. Typically, on a Linux Ubuntu system, you just need to type:
