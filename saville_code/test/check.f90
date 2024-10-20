@@ -21,12 +21,12 @@
 ! SOFTWARE.
 !-------------------------------------------------------------------------------
 ! Contributed by Vincent Magnin: 2023-03-26
-! Last modification: vmagnin 2023-04-21
+! Last modification: vmagnin 2024-10-20
 !-------------------------------------------------------------------------------
 
 program check
     use glyph_class
-    use grapheme_class
+    use charac_class
     use color_class
 
     implicit none

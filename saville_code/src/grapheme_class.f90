@@ -21,10 +21,10 @@
 ! SOFTWARE.
 !-------------------------------------------------------------------------------
 ! Contributed by Vincent Magnin: 2023-04-02
-! Last modification: vmagnin 2023-04-21
+! Last modification: vmagnin 2024-10-20
 !-------------------------------------------------------------------------------
 
-module grapheme_class
+module charac_class
     use glyph_class
     use, intrinsic :: iso_c_binding, only: c_ptr, dp=>c_double
     use cairo, only: cairo_line_to, cairo_move_to, cairo_close_path, &
@@ -32,20 +32,21 @@ module grapheme_class
 
     implicit none
 
-    type, extends(Glyph) :: Grapheme
+    ! A character is a glyph printed somewhere in a Cairo context:
+    type, extends(Glyph) :: Charac
         real(dp)    :: x, y
         real(dp)    :: width
-        type(c_ptr) :: cr
+        type(c_ptr) :: cr       ! Cairo context
     contains
         procedure :: draw
         ! Overrides the Glyph print():
-        procedure :: print=>print_grapheme
-    end type Grapheme
+        procedure :: print=>print_charac
+    end type Charac
 
 contains
 
     subroutine draw(self)
-        class(Grapheme), intent(inout) :: self
+        class(Charac), intent(inout) :: self
         real(dp) :: seph  ! Separator height
         real(dp) :: a
 
@@ -105,12 +106,12 @@ contains
     end subroutine
 
     ! Useful for testing and debugging:
-    subroutine print_grapheme(self)
-        class(Grapheme), intent(inout) :: self
+    subroutine print_charac(self)
+        class(Charac), intent(inout) :: self
 
-        print *, "------ Grapheme -----"
+        print *, "------ Charac -----"
         print *, self%name, self%x, self%y, self%width
         print *, "---------------------"
     end subroutine
 
-end module grapheme_class
+end module charac_class

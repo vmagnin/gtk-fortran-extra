@@ -21,7 +21,7 @@
 ! SOFTWARE.
 !-------------------------------------------------------------------------------
 ! Contributed by Vincent Magnin: 2023-03-26
-! Last modification: vmagnin 2023-04-21
+! Last modification: vmagnin 2024-10-20
 !-------------------------------------------------------------------------------
 
 module glyph_class
@@ -29,8 +29,10 @@ module glyph_class
 
     implicit none
 
+    ! A glyph is a particular graphical representation of a grapheme:
+    ! https://en.wikipedia.org/wiki/Glyph
     type :: Glyph
-        character   :: name
+        character   :: name         ! The grapheme
         type(Color) :: left
         type(Color) :: right
         logical     :: separator = .false.

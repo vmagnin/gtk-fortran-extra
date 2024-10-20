@@ -21,7 +21,7 @@
 ! SOFTWARE.
 !-------------------------------------------------------------------------------
 ! Contributed by Vincent Magnin: 2023-03-26
-! Last modification: vmagnin 2023-04-23
+! Last modification: vmagnin 2024-10-20
 !-------------------------------------------------------------------------------
 
 module gui
@@ -53,7 +53,7 @@ module gui
     & cairo_svg_surface_create, cairo_svg_surface_restrict_to_version, &
     & cairo_surface_destroy, cairo_create, cairo_destroy
 
-    use grapheme_class
+    use charac_class
 
     implicit none
     ! Widgets that must be global:
@@ -177,7 +177,7 @@ contains
         integer(c_int), value, intent(in) :: width, height
         integer(c_int) :: maxi
         integer        :: i
-        type(Grapheme) :: graph
+        type(Charac) :: graph
         real(dp) :: w, ls
         real(dp) :: x, y   ! Position of a character
         logical  :: horizontal
@@ -249,9 +249,9 @@ contains
                 end if
                 ! Draw the character i:
                 if (horizontal) then
-                    graph = Grapheme(name=my_string(i:i), x=x, y=y, width=w, cr=cr)
+                    graph = Charac(name=my_string(i:i), x=x, y=y, width=w, cr=cr)
                 else
-                    graph = Grapheme(name=my_string(i:i), x=y, y=x, width=w, cr=cr)
+                    graph = Charac(name=my_string(i:i), x=y, y=x, width=w, cr=cr)
                 end if
                 call graph%draw()
 

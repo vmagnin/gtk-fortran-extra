@@ -21,11 +21,11 @@ Note that we do not use any [ICC profile](https://en.wikipedia.org/wiki/ICC_prof
 * https://www.rapidtables.com/convert/color/rgb-to-cmyk.html
 * https://www.rapidtables.com/convert/color/cmyk-to-rgb.html
 
-### Glyph and grapheme classes
+### Glyph and charac classes
 
-A [glyph](https://en.wikipedia.org/wiki/Glyph) is defined by its name, the colors of its two halves and the presence or absence of a separator between the two halves. The `set()` method receives the name of the glyph (for example "A") and sets its other properties, using the Peter Saville's color code.
+A [glyph](https://en.wikipedia.org/wiki/Glyph) is defined by its name (the grapheme), the colors of its two halves and the presence or absence of a separator between the two halves. The `set()` method receives the name of the glyph (for example "A") and sets its other properties, using the Peter Saville's color code.
  
-The [grapheme](https://en.wikipedia.org/wiki/Grapheme) class extends the glyph class. It has x and y coordinates, a width in pixels and a Cairo context. The method `draw()` is used to draw it on screen.
+The `charac` class extends the glyph class. It has x and y coordinates, a width in pixels and a Cairo context. The method `draw()` is used to draw it on screen.
 
 
 ## Build and run
