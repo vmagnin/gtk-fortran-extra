@@ -69,8 +69,7 @@ but in that case **gtk-fortran must be compiled with the same compiler.**
 ## Contributing
 
 * Post a message in the GitHub *Issues* tab to discuss the feature you want to work on,
-* Concerning coding conventions, follow the stdlib conventions:
-https://github.com/fortran-lang/stdlib/blob/master/STYLE_GUIDE.md
+* Try to follow the same coding conventions.
 * When ready, make a *Pull Request*.
 
 
