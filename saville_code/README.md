@@ -80,7 +80,7 @@ https://github.com/fortran-lang/stdlib/blob/master/STYLE_GUIDE.md
     - Official Lyric Video: https://youtu.be/c1GxjzHm5us
     - Songs that Changed Music: New Order - *Blue Monday:* https://www.youtube.com/watch?v=Iyzk1Gwwu7c
   - New Order, *Power Corruption and Lies,* May 1983, [FACT 75](https://factoryrecords.org/cerysmatic/fact75.php).
-  - New Order, *Confusion,* 12" single, August 1983, [FACT 93](https://factoryrecords.org/cerysmatic/fac93.php).
+  - New Order, *Confusion,* 12" single, August 1983, [FAC 93](https://factoryrecords.org/cerysmatic/fac93.php).
     - Official Lyric Video (single version): https://youtu.be/c_L_-CKg6pw
   - Section 25, *From the Hip,* March 1984, [FACT 90](https://factoryrecords.org/cerysmatic/fact90c.php).
 * Matthew Robertson, [_Factory Records: The Complete Graphic Album_](https://factoryrecords.org/cerysmatic/fac461_factory_records_the_complete_graphic_album.php), FAC 461, Chronicle Books, 2006,  ISBN‎ 978-0811856768.
